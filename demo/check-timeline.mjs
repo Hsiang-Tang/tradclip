@@ -64,6 +64,29 @@ for (const event of [...timeline.clicks, ...timeline.presses]) {
   if (!(event.up > event.t)) fail(8, `event t=${event.t}, up=${event.up} does not release after press`);
 }
 
+for (const flip of flips) {
+  if (Number.isInteger(flip.step) && flip.step >= 0 && flip.step < timeline.changed.length) {
+    const expected = timeline.morph + flip.step * timeline.morphStep;
+    if (Math.abs(flip.t - expected) > 0.001) {
+      fail(9, `flip step=${flip.step} t=${flip.t} expected ${expected.toFixed(3)}`);
+    }
+  }
+}
+const { from, to, clear } = timeline.select;
+if (![from, to, clear].every(Number.isFinite) || from < 0 || clear >= timeline.duration) {
+  fail(10, `select from=${from}, to=${to}, clear=${clear}, duration=${timeline.duration}`);
+}
+for (const camera of timeline.camera) {
+  if (!Number.isFinite(camera.t) || !Number.isFinite(camera.d) || camera.d <= 0 || camera.t < 0 || camera.t + camera.d > timeline.duration) {
+    fail(11, `camera move t=${camera.t}, d=${camera.d} is outside [0, ${timeline.duration}]`);
+  }
+}
+for (const event of [...timeline.clicks, ...timeline.presses]) {
+  if (!Number.isFinite(event.t) || !Number.isFinite(event.up) || event.t < 0 || event.up >= timeline.duration) {
+    fail(12, `event t=${event.t}, up=${event.up} is outside [0, ${timeline.duration})`);
+  }
+}
+
 if (violations.length) {
   console.log(violations.join("\n"));
   process.exitCode = 1;

@@ -155,3 +155,11 @@ previous app in front, and a run like that tests nothing.
   end, `select.clear` equal to `select.from` and overlapping camera moves fails R1, R5
   and R6, exit code 1.
 
+### 2026-10-25 Timeline ranges (T6)
+
+- `node demo/check-timeline.mjs`: `timeline check: OK (31 sound events)`.
+- Negative checks, each exit code 1 with only the named rule: `morph` moved by +0.3 s,
+  and one flip moved one sixteenth late, fail R9; `select.clear` at the duration and
+  `select.from` null fail R10; a camera move past the end and one starting at -0.1 s fail
+  R11; a key release at 99 s and a click at -0.05 s fail R12.
+

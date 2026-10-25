@@ -9,4 +9,4 @@
 | F5 | DF-6 | `ffprobe` on the MP4, size of the GIF | 1920x1080 with an audio stream; GIF under 2 MB; MP4 not tracked by Git |
 | F6 | DF-7 | `node demo/render.mjs all` | rebuilds everything; the QA pass prints `qa: OK` |
 | F7 | DF-8 | stills during the drag, `qa` | the selection ends at the pointer in every still; the pointer stays on the text lines |
-| F8 | DF-4, DF-7 | `node demo/check-timeline.mjs` | prints `timeline check: OK`; a timeline with a flip moved off the grid fails R2 |
+| F8 | DF-4, DF-7 | `node demo/check-timeline.mjs` | prints `timeline check: OK`; a timeline with a flip moved off the grid fails R2; a flip off the morph schedule, or a selection, camera move, click or key press outside the film, fails R9 to R12 |

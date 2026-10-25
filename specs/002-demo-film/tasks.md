@@ -8,3 +8,5 @@
   beat-synced score. Requirements DF-2, DF-4, DF-8. Status: done.
 - T5 Timeline checker `demo/check-timeline.mjs`: events on the beat grid, flips match the
   changed characters, camera moves do not overlap. Requirements DF-4, DF-7. Status: done.
+- T6 Timeline ranges: flips follow the morph schedule; selection, camera moves, clicks and
+  key presses stay inside the film. Requirements DF-4, DF-7. Status: done.
