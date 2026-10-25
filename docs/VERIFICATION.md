@@ -70,3 +70,13 @@ previous app in front, and a run like that tests nothing.
   so they guard against regressions rather than prove the change.
 - Final: 22 cases pass, idempotence passes, clippy clean; 10,000 characters still
   under 50 ms.
+
+### 2026-10-25 Paste as Traditional (K4)
+
+- The app now installs into `/Applications`: the maintainer could not find
+  `~/Applications` in the Accessibility file picker. Accessibility granted by the
+  maintainer.
+- K4 scripted in TextEdit: clipboard `我们了解秘书的工作，之后再说`, Control+Option+V sent
+  with System Events; the document received `我們了解秘書的工作，之後再說` and the
+  clipboard read back the original Simplified text afterwards.
+- Not yet run: K4 in a VS Code terminal, K5 (menu choices after relaunch).

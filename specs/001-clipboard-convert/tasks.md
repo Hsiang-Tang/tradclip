@@ -8,8 +8,8 @@
 - T3 C interface and `tradclip` CLI. Status: done (2026-10-25).
 - T4 macOS menu bar app: clipboard watch and rewrite. Requirements TC-6, TC-7, TC-9,
   TC-10. Status: done (2026-10-25); K1 to K3 pass.
-- T5 Paste as Traditional shortcut. Requirement TC-8. Status: built; hand test K4
-  open.
+- T5 Paste as Traditional shortcut. Requirement TC-8. Status: done (2026-10-25); K4 passed
+  in TextEdit, terminal check by hand open.
 - T6 Build, install, scripted checks K1 to K3, docs. Status: done (2026-10-25).
 - T7 Accuracy evaluation (`tradclip --eval`, pinned data), three-way sentence gate,
   Taiwan usage tables. Requirements TC-3, TC-12, TC-13. Status: done (2026-10-25).

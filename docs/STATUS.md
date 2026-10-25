@@ -11,12 +11,12 @@ passed the scripted checks.
 
 ## Next action
 
-- Maintainer: allow Accessibility for tradclip, then hand-test K4 (Control+Option+V
-  in a VS Code terminal) and K5 (menu choices persist after relaunch).
+- Maintainer: try Control+Option+V in a VS Code terminal and check that menu choices
+  persist after relaunch (K5).
 
 ## Not verified
 
-- K4 Paste as Traditional, K5 menu persistence: need a human.
+- K4 in a terminal (passed in TextEdit), K5 menu persistence: need a human.
 - Auto-convert from the ChatGPT app: the same code path as Claude, not yet run with
   ChatGPT frontmost.
 - Other Macs: Homebrew's Rust standard library targets the build machine's macOS
