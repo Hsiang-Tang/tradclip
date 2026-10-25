@@ -27,7 +27,12 @@ fn acceptance_cases() {
             (got != want).then(|| format!("{id}: {input:?} gave {got:?}, want {want:?}"))
         })
         .collect();
-    assert!(failed.is_empty(), "{} failed:\n{}", failed.len(), failed.join("\n"));
+    assert!(
+        failed.is_empty(),
+        "{} failed:\n{}",
+        failed.len(),
+        failed.join("\n")
+    );
 }
 
 #[test]

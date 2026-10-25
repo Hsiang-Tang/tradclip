@@ -20,6 +20,14 @@ to make an implementation pass.
 | C10 | TC-4 | empty, ASCII, emoji, CRLF line endings | unchanged apart from Chinese |
 | C11 | TC-5 | 台湾的台风 | 台灣的颱風 |
 | C12 | TC-4 | converting the output of every case again | same output |
+| C13 | TC-3 | 之后 | 之後 |
+| C14 | TC-3 | 于先生 | unchanged |
+| C15 | TC-3 | 他卧底多年，後來被發現了 (Traditional with one variant) | unchanged |
+| C16 | TC-3 | 比较像 | 比較像 |
+| C17 | TC-3 | 接着说 | 接著說 |
+| C18 | TC-12 | 广告 | 廣告 |
+| C19 | TC-12 | 分布在各地 | 分布在各地 |
+| C20 | TC-12 | 我们了解秘书的工作 | 我們了解秘書的工作 |
 
 ## Clipboard checks
 
@@ -31,3 +39,4 @@ to make an implementation pass.
 | K4 | TC-8 | In a terminal, Control+Option+V pastes Traditional text and the clipboard still holds the original afterwards. By hand. |
 | K5 | TC-9 | Menu toggles persist after quitting and relaunching. By hand. |
 | K6 | TC-11 | `cargo test --release` timing test. |
+| K7 | TC-13 | `tools/fetch-eval-data.sh`, then `tradclip --eval`; held-out phrases with `build_taiwan_tables.py --holdout` and `tradclip --eval --holdout`. |

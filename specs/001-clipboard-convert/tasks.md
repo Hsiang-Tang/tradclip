@@ -11,3 +11,5 @@
 - T5 Paste as Traditional shortcut. Requirement TC-8. Status: built; hand test K4
   open.
 - T6 Build, install, scripted checks K1 to K3, docs. Status: done (2026-10-25).
+- T7 Accuracy evaluation (`tradclip --eval`, pinned data), three-way sentence gate,
+  Taiwan usage tables. Requirements TC-3, TC-12, TC-13. Status: done (2026-10-25).

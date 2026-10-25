@@ -11,9 +11,12 @@ mod ffi;
 
 const ST_PHRASES: &str = include_str!("../../../data/opencc/STPhrases.txt");
 const ST_CHARACTERS: &str = include_str!("../../../data/opencc/STCharacters.txt");
+const TS_CHARACTERS: &str = include_str!("../../../data/opencc/TSCharacters.txt");
 const TW_PHRASES: &str = include_str!("../../../data/opencc/TWVariantsPhrases.txt");
 const TW_CHARACTERS: &str = include_str!("../../../data/opencc/TWVariants.txt");
 const OVERRIDES: &str = include_str!("../../../data/overrides.tsv");
+const TAIWAN_PHRASES: &str = include_str!("../../../data/taiwan-phrases.tsv");
+const TAIWAN_SIMPLIFIED: &str = include_str!("../../../data/taiwan-simplified-chars.txt");
 
 const SENTENCE_END: &[char] = &['。', '！', '？', '!', '?', '；', ';', '\n'];
 
@@ -44,6 +47,18 @@ impl Dict {
     }
 
     fn apply(&self, text: &str, out: &mut String) {
+        self.apply_with(text, 1, out, |value, out| out.push_str(value));
+    }
+
+    /// Longest match using keys of at least `min_len` characters; `emit` writes each
+    /// matched value, unmatched characters are copied.
+    fn apply_with(
+        &self,
+        text: &str,
+        min_len: usize,
+        out: &mut String,
+        mut emit: impl FnMut(&str, &mut String),
+    ) {
         let bounds: Vec<usize> = text
             .char_indices()
             .map(|(i, _)| i)
@@ -52,12 +67,18 @@ impl Dict {
         let n = bounds.len() - 1;
         let mut i = 0;
         while i < n {
-            let hit = self.lengths.iter().filter(|&&len| len <= n - i).find_map(|&len| {
-                self.map.get(&text[bounds[i]..bounds[i + len]]).map(|v| (len, v))
-            });
+            let hit = self
+                .lengths
+                .iter()
+                .filter(|&&len| len >= min_len && len <= n - i)
+                .find_map(|&len| {
+                    self.map
+                        .get(&text[bounds[i]..bounds[i + len]])
+                        .map(|v| (len, v))
+                });
             match hit {
                 Some((len, value)) => {
-                    out.push_str(value);
+                    emit(value, out);
                     i += len;
                 }
                 None => {
@@ -80,6 +101,7 @@ struct Converter {
     simplified: Dict,
     taiwan: Dict,
     simplified_only: HashSet<char>,
+    traditional_only: HashSet<char>,
 }
 
 impl Converter {
@@ -88,25 +110,55 @@ impl Converter {
         let simplified_only = entries(ST_CHARACTERS)
             .filter(|(key, candidates)| !candidates.split(' ').any(|c| c == *key))
             .filter_map(|(key, _)| key.chars().next())
+            .chain(
+                TAIWAN_SIMPLIFIED
+                    .lines()
+                    .filter(|l| !l.starts_with('#'))
+                    .filter_map(|l| l.chars().next()),
+            )
+            .collect();
+        // Traditional-only: OpenCC simplifies it and never keeps it (後, 說, 們; not 像).
+        let traditional_only = entries(TS_CHARACTERS)
+            .filter(|(key, candidates)| !candidates.split(' ').any(|c| c == *key))
+            .filter_map(|(key, _)| key.chars().next())
             .collect();
         Converter {
             // Phrases override single characters of the same key, as OpenCC's short circuit does.
-            simplified: Dict::from_sources(&[ST_CHARACTERS, ST_PHRASES]),
+            // Taiwan usage from McBopomofo overrides OpenCC's phrase choices (ADR-0002).
+            simplified: Dict::from_sources(&[ST_CHARACTERS, ST_PHRASES, TAIWAN_PHRASES]),
             taiwan: Dict::from_sources(&[TW_CHARACTERS, TW_PHRASES, OVERRIDES]),
             simplified_only,
+            traditional_only,
         }
     }
 
+    /// Each sentence is judged on its own (TC-3): more Simplified-only than
+    /// Traditional-only characters means Simplified; any Traditional-only character
+    /// otherwise means Traditional; neither means only whole phrases are converted
+    /// (之后 to 之後), never single characters (于先生 stays), before the Taiwan pass.
     fn convert(&self, text: &str) -> String {
         let mut out = String::with_capacity(text.len());
         let mut step = String::new();
         for sentence in text.split_inclusive(SENTENCE_END) {
-            if sentence.chars().any(|c| self.simplified_only.contains(&c)) {
+            let simplified = sentence
+                .chars()
+                .filter(|c| self.simplified_only.contains(c))
+                .count();
+            let traditional = sentence
+                .chars()
+                .filter(|c| self.traditional_only.contains(c))
+                .count();
+            if simplified > traditional {
                 step.clear();
                 self.simplified.apply(sentence, &mut step);
                 self.taiwan.apply(&step, &mut out);
-            } else {
+            } else if traditional > 0 {
                 out.push_str(sentence);
+            } else {
+                step.clear();
+                self.simplified
+                    .apply_with(sentence, 2, &mut step, |value, out| out.push_str(value));
+                self.taiwan.apply(&step, &mut out);
             }
         }
         out
@@ -121,6 +173,14 @@ fn converter() -> &'static Converter {
 /// Loads the dictionaries now instead of on the first conversion.
 pub fn warm_up() {
     converter();
+}
+
+/// Applies only the Taiwan character-form pass (裏 to 裡, 臺 to 台). The evaluation
+/// uses it to put reference text in the same forms the converter writes.
+pub fn taiwan_forms(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    converter().taiwan.apply(text, &mut out);
+    out
 }
 
 /// Converts Simplified Chinese in `text` to Traditional Chinese with Taiwan forms.

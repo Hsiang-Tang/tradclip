@@ -28,9 +28,18 @@ step). `data/overrides.tsv` is applied in the second pass after OpenCC's tables 
 holds the project's own choices; today only 臺 to 台 (ADR-0001).
 
 Traditional text (TC-3): a character is Simplified-only when it is a key in
-`STCharacters` and its candidates do not include itself (发, 说, 们; not 于, 后, 台).
-Text is cut into sentences after 。！？!?；; and line breaks, and only sentences
-with a Simplified-only character go through the chain.
+`STCharacters` and its candidates do not include itself (发, 说, 们; not 于, 后, 台),
+plus the generated `data/taiwan-simplified-chars.txt`. A character is
+Traditional-only when `TSCharacters` simplifies it and never keeps it (後, 說; not
+像). Text is cut into sentences after 。！？!?；; and line breaks; each sentence is
+converted fully, left alone, or converted phrase by phrase (ADR-0002).
+
+Taiwan usage (TC-12): `data/taiwan-phrases.tsv`, generated from McBopomofo's phrase
+frequencies, is loaded after `STPhrases` and wins over it (ADR-0002).
+
+Accuracy (TC-13): `tradclip --eval` scores McBopomofo phrases simplified with Unihan
+(an answer key independent of OpenCC), UD Chinese GSDSimp against GSD sentences,
+and GSD sentences that must stay unchanged.
 
 ## Clipboard shell (TC-6 to TC-10)
 

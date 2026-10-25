@@ -1,0 +1,141 @@
+"""Build the Taiwan usage tables from McBopomofo phrase frequencies (ADR-0002).
+
+    python3 -I tools/build_taiwan_tables.py [--holdout]
+
+Inputs come from tools/fetch-eval-data.sh. Writes:
+
+- data/taiwan-phrases.tsv: Simplified phrase to the Traditional phrase Taiwan writers
+  use most, where that differs from what OpenCC alone gives.
+- data/taiwan-simplified-chars.txt: characters OpenCC lists as also Traditional
+  (广, 万) that Taiwan text almost never uses, so they mark a sentence as Simplified.
+
+--holdout leaves out every phrase in the evaluation's held-out fifth, so
+`tradclip --eval --holdout` measures phrases the tables never saw.
+"""
+
+import subprocess
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+EVAL = ROOT / "eval-data"
+PHRASES_OUT = ROOT / "data" / "taiwan-phrases.tsv"
+CHARS_OUT = ROOT / "data" / "taiwan-simplified-chars.txt"
+
+MIN_COUNT = 30  # a phrase needs this many occurrences to be chosen
+DOMINANCE = 2.0  # and must be this many times as common as OpenCC's choice
+RARE_RATIO = 0.02  # a character this much rarer than its Traditional form is Simplified in practice
+# Rare in the corpus but real in Taiwan text: the surname 于 and 皇后. Never mark these.
+KEEP_TRADITIONAL = set("于后台里面干")
+
+
+def common(c):
+    return "一" <= c <= "鿿"
+
+
+def is_han(c):
+    return common(c) or "㐀" <= c <= "䶿" or "\U00020000" <= c <= "\U0003134f"
+
+
+def held_out(simplified):
+    """Same rule as eval.rs: the held-out fifth, chosen by the Simplified form."""
+    return sum(ord(c) for c in simplified) % 5 == 0
+
+
+def simplifier():
+    table = {}
+    for line in (EVAL / "Unihan_Variants.txt").read_text(encoding="utf-8").splitlines():
+        fields = line.split("\t")
+        if len(fields) == 3 and fields[1] == "kSimplifiedVariant":
+            targets = [chr(int(u[2:], 16)) for u in fields[2].split()]
+            table[chr(int(fields[0][2:], 16))] = next((t for t in targets if common(t)), targets[0])
+    return lambda text: "".join(table.get(c, c) for c in text)
+
+
+def phrases():
+    for line in (EVAL / "phrase.occ").read_text(encoding="utf-8").splitlines():
+        text, _, count = line.partition(" ")
+        if text and count.strip().isdigit():
+            yield text, int(count)
+
+
+def opencc_only(lines):
+    """Converts with the project tables emptied, i.e. OpenCC plus the 臺 override."""
+    cli = ROOT / "target" / "release" / "tradclip"
+    subprocess.run(["cargo", "build", "-q", "--release", "-p", "tradclip-cli"], cwd=ROOT, check=True)
+    out = subprocess.run([str(cli)], input="\n".join(lines) + "\n", capture_output=True, text=True, check=True)
+    result = out.stdout.split("\n")[: len(lines)]
+    assert len(result) == len(lines)
+    return result
+
+
+def char_table(st_characters, freq):
+    rare = []
+    for line in st_characters.read_text(encoding="utf-8").splitlines():
+        if line.startswith("#") or "\t" not in line:
+            continue
+        key, candidates = line.split("\t")
+        others = [c for c in candidates.split(" ") if c != key]
+        if key not in candidates.split(" ") or not others or key in KEEP_TRADITIONAL:
+            continue
+        best = max(freq.get(c, 0) for c in others)
+        if best > 0 and freq.get(key, 0) < RARE_RATIO * best:
+            rare.append(key)
+    return rare
+
+
+def traditional_only():
+    """Characters OpenCC always simplifies (eval.rs skips inputs holding one)."""
+    result = set()
+    for line in (ROOT / "data" / "opencc" / "TSCharacters.txt").read_text(encoding="utf-8").splitlines():
+        key, _, candidates = line.partition("\t")
+        if candidates and key not in candidates.split(" "):
+            result.add(key)
+    return result
+
+
+def main():
+    holdout = "--holdout" in sys.argv[1:]
+    simplify = simplifier()
+    traditional = traditional_only()
+
+    freq = defaultdict(int)
+    by_simplified = defaultdict(dict)
+    for text, count in phrases():
+        for c in text:
+            freq[c] += count
+        if len(text) < 2 or not all(is_han(c) for c in text):
+            continue
+        s = simplify(text)
+        if not all(common(c) for c in s) or any(c in traditional for c in s) or (holdout and held_out(s)):
+            continue
+        by_simplified[s][text] = max(count, by_simplified[s].get(text, 0))
+
+    PHRASES_OUT.write_text("", encoding="utf-8")
+    CHARS_OUT.write_text("", encoding="utf-8")
+    keys = sorted(by_simplified)
+    base = dict(zip(keys, opencc_only(keys)))
+
+    chosen = []
+    for s in keys:
+        candidates = by_simplified[s]
+        top, top_count = max(candidates.items(), key=lambda kv: (kv[1], kv[0]))
+        current = base[s]
+        if top == current or top_count < MIN_COUNT:
+            continue
+        if top_count >= DOMINANCE * candidates.get(current, 0):
+            chosen.append((s, top))
+
+    header = (
+        "# Generated by tools/build_taiwan_tables.py from McBopomofo phrase.occ (MIT,\n"
+        "# Copyright Mengjuei Hsieh et al.). Do not edit by hand.\n"
+    )
+    PHRASES_OUT.write_text(header + "".join(f"{s}\t{t}\n" for s, t in chosen), encoding="utf-8")
+    rare = char_table(ROOT / "data" / "opencc" / "STCharacters.txt", freq)
+    CHARS_OUT.write_text(header + "".join(f"{c}\n" for c in rare), encoding="utf-8")
+    print(f"{len(chosen)} phrases, {len(rare)} characters{' (holdout)' if holdout else ''}")
+
+
+if __name__ == "__main__":
+    main()

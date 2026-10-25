@@ -23,12 +23,21 @@ Conversion (core):
   not 頭發.
 - TC-2 Characters only, never vocabulary: 软件 gives 軟件, not 軟體.
 - TC-3 Traditional text stays as written. Text is split into sentences (after
-  。！？!?；; and line breaks); a sentence is converted only when it contains at least
-  one character that exists only in Simplified. A sentence such as 于先生說 is left
-  alone, so the surname 于 is never turned into 於.
+  。！？!?；; and line breaks) and each is judged on its own: more characters that
+  exist only in Simplified than characters that exist only in Traditional means
+  Simplified; otherwise any Traditional-only character means Traditional and the
+  sentence is left alone (a stray variant such as 卧 in Traditional text does not flip
+  it); a sentence with neither gets whole phrases converted (之后 gives 之後) but no
+  single characters, so 于先生 is never turned into 於先生.
 - TC-4 Everything that is not Chinese (Latin letters, digits, code, emoji, spacing,
   line endings) is unchanged, and converting twice gives the same result as once.
 - TC-5 臺 is written 台, the everyday Taiwan form; 颱 and 檯 are kept (台风 gives 颱風).
+- TC-12 Where several Traditional spellings exist, the one Taiwan writers use most is
+  chosen, measured on McBopomofo's phrase frequencies (分布 stays 分布, 了解 stays
+  了解, 秘书 gives 秘書). Characters listed as also Traditional but almost never
+  written in Taiwan (广, 万) count as Simplified.
+- TC-13 Accuracy is measured with `tradclip --eval` on pinned data and reported in
+  the README; a change may not lower it without a recorded reason.
 
 Clipboard (macOS shell):
 
@@ -52,7 +61,7 @@ Clipboard (macOS shell):
 ## Acceptance
 
 - Conversion cases are listed in `acceptance.md` and run by
-  `crates/tradclip-core/tests/cases.txt`.
+  `crates/tradclip-core/tests/cases.txt`. Accuracy: `docs/VERIFICATION.md`.
 - Clipboard behavior is checked by hand and by script as listed in `acceptance.md`.
 
 ## Not doing

@@ -2,3 +2,4 @@
 /macos/build/
 .DS_Store
 /.claude/
+/eval-data/
