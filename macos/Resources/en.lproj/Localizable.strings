@@ -1,4 +1,4 @@
-"menu.auto" = "Auto-convert from ChatGPT and Claude";
+"menu.auto" = "Convert copies to Traditional";
 "menu.paste" = "Paste as Traditional (⌃⌥V)";
 "menu.ax.ok" = "Accessibility: allowed";
 "menu.ax.missing" = "Allow Accessibility for ⌃⌥V…";

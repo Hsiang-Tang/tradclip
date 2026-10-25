@@ -85,3 +85,16 @@ previous app in front, and a run like that tests nothing.
   showed no press reached the app. The maintainer had pressed Control+V, their paste
   habit. With Control+Option+V it pasted Traditional text. A temporary key monitor
   used to diagnose this was removed; the event log stays.
+
+### 2026-10-25 Auto-convert in every app (TC-6 revised)
+
+- Maintainer decision: keep Command+C and Command+V; convert every copy in any app
+  instead of only ChatGPT and Claude. Control+Option+V is now off by default.
+- First check run tested nothing: the app was not running after that build (killall
+  in the next step found no process). Rebuilt, confirmed the process, reran.
+- K1: VS Code frontmost, `我们了解秘书的工作，之后再说` read back
+  `我們了解秘書的工作，之後再說`; Finder frontmost, `这里的说明` read back `這裡的說明`.
+- K2: with `autoConvert` false the text stayed Simplified; with the setting removed
+  (default on) it converted again.
+- K3: Traditional and English text left the change count as is (97 to 97).
+- Concealed content stayed Simplified.

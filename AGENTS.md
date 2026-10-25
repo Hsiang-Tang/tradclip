@@ -1,8 +1,8 @@
 # tradclip project rules
 
 tradclip turns Simplified Chinese on the macOS clipboard into Traditional Chinese
-(Taiwan character forms): automatically for text copied in the ChatGPT and Claude
-apps, and on demand with Control+Option+V. This file is the single source of project
+(Taiwan character forms): automatically on every copy, and optionally with
+Control+Option+V. This file is the single source of project
 rules; `CLAUDE.md` only imports it.
 
 The project follows spec-driven development: the specification is the source of

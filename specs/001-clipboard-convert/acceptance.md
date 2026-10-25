@@ -33,9 +33,9 @@ to make an implementation pass.
 
 | Check | Requirement | How |
 | --- | --- | --- |
-| K1 | TC-6 | With Claude frontmost, put Simplified text on the clipboard; it reads back Traditional. Scripted in `docs/VERIFICATION.md`. |
-| K2 | TC-6 | With another app frontmost, the same text stays Simplified. Scripted. |
-| K3 | TC-7 | Traditional or English text copied in Claude leaves the clipboard change count as is. Scripted. |
+| K1 | TC-6 | With Claude or any other app frontmost, put Simplified text on the clipboard; it reads back Traditional. Scripted in `docs/VERIFICATION.md`. |
+| K2 | TC-6 | With auto-convert switched off, the same text stays Simplified. Scripted. |
+| K3 | TC-7 | Traditional or English text copied leaves the clipboard change count as is. Scripted. |
 | K4 | TC-8 | In a terminal, Control+Option+V pastes Traditional text and the clipboard still holds the original afterwards. By hand. |
 | K5 | TC-9 | Menu toggles persist after quitting and relaunching. By hand. |
 | K6 | TC-11 | `cargo test --release` timing test. |

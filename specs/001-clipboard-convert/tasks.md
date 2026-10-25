@@ -13,3 +13,5 @@
 - T6 Build, install, scripted checks K1 to K3, docs. Status: done (2026-10-25).
 - T7 Accuracy evaluation (`tradclip --eval`, pinned data), three-way sentence gate,
   Taiwan usage tables. Requirements TC-3, TC-12, TC-13. Status: done (2026-10-25).
+- T8 Auto-convert in every app, shortcut off by default (maintainer decision).
+  Requirements TC-6, TC-8, TC-9. Status: done (2026-10-25); K1 to K3 pass.

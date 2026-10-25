@@ -11,7 +11,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let defaults = UserDefaults.standard
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        defaults.register(defaults: ["autoConvert": true, "pasteShortcut": true])
+        defaults.register(defaults: ["autoConvert": true, "pasteShortcut": false])
         Converter.warmUp()
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

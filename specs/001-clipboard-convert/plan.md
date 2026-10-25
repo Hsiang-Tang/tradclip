@@ -43,9 +43,9 @@ and GSD sentences that must stay unchanged.
 
 ## Clipboard shell (TC-6 to TC-10)
 
-- Watch: a 0.25 s timer compares `NSPasteboard.general.changeCount`. On a change it
-  reads the frontmost app's bundle ID from `NSWorkspace`; only listed apps are acted
-  on. Polling is the only public way to observe the pasteboard on macOS.
+- Watch: a 0.25 s timer compares `NSPasteboard.general.changeCount` and converts on
+  every change made outside the app, whichever app made it. Polling is the only
+  public way to observe the pasteboard on macOS.
 - Rewrite: skip if the types include `org.nspasteboard.ConcealedType` or
   `org.nspasteboard.TransientType`. Convert the string and, if present, the HTML;
   write both back only if either changed, then record the new change count so the

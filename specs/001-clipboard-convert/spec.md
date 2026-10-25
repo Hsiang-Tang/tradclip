@@ -10,7 +10,8 @@ round trip through another tool for every message.
 ## Users and context
 
 - A Traditional Chinese (Taiwan) writer on macOS who dictates in ChatGPT or Claude
-  and pastes the result elsewhere, mostly into a terminal.
+  and pastes the result elsewhere, mostly into a terminal, with Command+C and
+  Command+V as usual.
 - Works in any app as the paste target, including Electron apps and terminals.
 
 ## Requirements
@@ -41,19 +42,19 @@ Conversion (core):
 
 Clipboard (macOS shell):
 
-- TC-6 Auto-convert: when the clipboard changes while ChatGPT or Claude is the
-  frontmost app, its text is converted in place. The app list defaults to
-  `com.openai.codex`, `com.openai.chat` and `com.anthropic.claudefordesktop`. Copies
-  made in any other app are never touched. Needs no system permission.
+- TC-6 Auto-convert: whenever the clipboard changes, in any app, its text is
+  converted in place, so Command+C and Command+V work as always and paste
+  Traditional text. On by default; one menu switch turns it off (for the rare copy
+  that should stay Simplified). Needs no system permission.
 - TC-7 The clipboard is rewritten only when conversion changes the text. Plain text
   and HTML are converted; other formats are dropped only when a rewrite happens.
   Contents marked concealed or transient (password managers) are never read.
-- TC-8 Paste as Traditional: Control+Option+V converts the clipboard text, pastes it
-  into the frontmost app, and then restores the clipboard to what it held before.
-  Needs Accessibility permission; without it the shortcut does nothing but explain
-  how to grant it.
-- TC-9 Menu bar item with: Auto-convert from ChatGPT and Claude (on/off), Paste as
-  Traditional shortcut (on/off), Accessibility status (opens the settings pane when
+- TC-8 Paste as Traditional (off by default, for use with auto-convert switched
+  off): Control+Option+V converts the clipboard text, pastes it into the frontmost
+  app, and then restores the clipboard to what it held before. Needs Accessibility
+  permission; without it the shortcut does nothing but explain how to grant it.
+- TC-9 Menu bar item with: Auto-convert copies (on/off), Paste as Traditional
+  shortcut (on/off), Accessibility status (opens the settings pane when
   missing), Open at Login, Quit. Choices persist across launches.
 - TC-10 Private: no network access, and clipboard text is never logged or stored.
 - TC-11 Fast: converting 10,000 characters takes under 50 ms in a release build.
@@ -67,5 +68,5 @@ Clipboard (macOS shell):
 ## Not doing
 
 - Vocabulary changes (OpenCC `s2twp`), Traditional to Simplified, Hong Kong forms.
-- Replacing a selection in place (terminals cannot), automatic conversion in other
-  apps, iOS.
+- Replacing a selection in place (terminals cannot), taking over Command+V itself,
+  iOS.

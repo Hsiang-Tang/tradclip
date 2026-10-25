@@ -1,4 +1,4 @@
-"menu.auto" = "從 ChatGPT 和 Claude 複製時自動轉繁體";
+"menu.auto" = "複製時自動轉繁體";
 "menu.paste" = "貼上為繁體（⌃⌥V）";
 "menu.ax.ok" = "輔助使用：已允許";
 "menu.ax.missing" = "允許「輔助使用」以啟用 ⌃⌥V…";

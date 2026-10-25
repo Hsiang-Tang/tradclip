@@ -7,10 +7,11 @@ Voice transcription in the ChatGPT and Claude apps often comes out in Simplified
 Chinese. tradclip fixes it on the way to wherever you paste, including terminals,
 where a selection cannot be replaced in place.
 
-- **Copy in ChatGPT or Claude**: the copied text is converted right away. Paste as
-  usual. No permission needed.
-- **Control+Option+V anywhere**: pastes the clipboard as Traditional and leaves the
-  clipboard as it was. Needs Accessibility permission.
+- **Copy and paste as usual**: Command+C anywhere converts the copied text right
+  away, so Command+V pastes Traditional. No permission needed. Switch it off in the
+  menu for a copy that should stay Simplified.
+- **Control+Option+V** (off by default): with auto-convert off, pastes the clipboard
+  as Traditional and leaves the clipboard as it was. Needs Accessibility permission.
 
 ```
 $ echo "我们用语音输入，这里的说明需要更新" | tradclip
@@ -58,8 +59,9 @@ macos/build.sh
 ```
 
 This builds `Tradclip.app`, installs it into `/Applications` and starts it; 繁 appears
-in the menu bar. For Control+Option+V, choose "Allow Accessibility" in that menu and
-switch tradclip on in System Settings > Privacy & Security > Accessibility. Choose
+in the menu bar. To use Control+Option+V, switch it on in that menu, choose "Allow
+Accessibility" and switch tradclip on in System Settings > Privacy & Security >
+Accessibility. Choose
 "Open at Login" to keep it running.
 
 The `tradclip` command (`cargo build --release -p tradclip-cli`) converts stdin or its
