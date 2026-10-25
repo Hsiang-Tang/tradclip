@@ -148,3 +148,10 @@ previous app in front, and a run like that tests nothing.
   6b7392b2031e2bc075c305844d420bbf0dedfc76dcd90061647a36c8f042cd33, `spctl` accepts the
   unzipped app. The README GIF loads from the main branch.
 
+### 2026-10-25 Timeline checker (T5)
+
+- `node demo/check-timeline.mjs`: `timeline check: OK (31 sound events)`.
+- Negative checks: a flip moved by +0.05 s fails R2; a timeline with an event past the
+  end, `select.clear` equal to `select.from` and overlapping camera moves fails R1, R5
+  and R6, exit code 1.
+

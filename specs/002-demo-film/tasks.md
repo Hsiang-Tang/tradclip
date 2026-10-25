@@ -6,3 +6,5 @@
   DF-6. Status: done (attached to release v0.1.0).
 - T4 Revision after review: selection follows the pointer, camera shots, bright
   beat-synced score. Requirements DF-2, DF-4, DF-8. Status: done.
+- T5 Timeline checker `demo/check-timeline.mjs`: events on the beat grid, flips match the
+  changed characters, camera moves do not overlap. Requirements DF-4, DF-7. Status: done.
