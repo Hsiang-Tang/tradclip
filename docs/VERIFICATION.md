@@ -80,3 +80,8 @@ previous app in front, and a run like that tests nothing.
   with System Events; the document received `我們了解秘書的工作，之後再說` and the
   clipboard read back the original Simplified text afterwards.
 - Not yet run: K4 in a VS Code terminal, K5 (menu choices after relaunch).
+- Maintainer hand test: Control+Option+V first seemed to fail; the event log
+  (`log show --predicate 'subsystem == "com.hsiangtang.tradclip"'`, event names only)
+  showed no press reached the app. The maintainer had pressed Control+V, their paste
+  habit. With Control+Option+V it pasted Traditional text. A temporary key monitor
+  used to diagnose this was removed; the event log stays.

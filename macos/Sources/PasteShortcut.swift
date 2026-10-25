@@ -1,5 +1,10 @@
 import Carbon
 import Cocoa
+import os
+
+/// Event names only, never clipboard text (TC-10):
+/// `log show --predicate 'subsystem == "com.hsiangtang.tradclip"' --last 5m`
+let log = Logger(subsystem: "com.hsiangtang.tradclip", category: "paste")
 
 /// Control+Option+V pastes the clipboard as Traditional and then puts the original
 /// back (TC-8). Listening needs no permission; posting Command+V needs Accessibility.
@@ -31,8 +36,9 @@ final class PasteShortcut {
             return noErr
         }, 1, &spec, Unmanaged.passUnretained(self).toOpaque(), &handler)
         let id = EventHotKeyID(signature: OSType(0x5452_4350), id: 1) // "TRCP"
-        RegisterEventHotKey(UInt32(kVK_ANSI_V), UInt32(controlKey | optionKey), id,
-                            GetApplicationEventTarget(), 0, &hotKey)
+        let status = RegisterEventHotKey(UInt32(kVK_ANSI_V), UInt32(controlKey | optionKey), id,
+                                         GetApplicationEventTarget(), 0, &hotKey)
+        log.notice("register shortcut: status \(status)")
     }
 
     func unregister() {
@@ -43,12 +49,17 @@ final class PasteShortcut {
     }
 
     private func pressed() {
+        log.notice("shortcut pressed, trusted \(Self.isTrusted)")
         guard Self.isTrusted else {
             Self.requestTrust()
             return
         }
-        guard !clipboard.isPrivate, let text = clipboard.board.string(forType: .string) else { return }
+        guard !clipboard.isPrivate, let text = clipboard.board.string(forType: .string) else {
+            log.notice("no plain text on the clipboard")
+            return
+        }
         let converted = Converter.convert(text)
+        log.notice("converted, changed \(converted != text)")
         guard converted != text else {
             whenModifiersReleased(postCommandV)
             return
@@ -62,6 +73,9 @@ final class PasteShortcut {
                 // Leave a newer copy made in the meantime alone.
                 if clipboard.board.changeCount == ours {
                     clipboard.restore(original)
+                    log.notice("clipboard restored")
+                } else {
+                    log.notice("newer copy found, not restored")
                 }
             }
         }
@@ -72,6 +86,7 @@ final class PasteShortcut {
     }
 
     private static func postCommandV() {
+        log.notice("posting Command+V, modifiers \(NSEvent.modifierFlags.rawValue)")
         let source = CGEventSource(stateID: .combinedSessionState)
         for keyDown in [true, false] {
             let event = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: keyDown)
