@@ -15,3 +15,5 @@
   Taiwan usage tables. Requirements TC-3, TC-12, TC-13. Status: done (2026-10-25).
 - T8 Auto-convert in every app, shortcut off by default (maintainer decision).
   Requirements TC-6, TC-8, TC-9. Status: done (2026-10-25); K1 to K3 pass.
+- T9 Universal, notarized release (`macos/release.sh`), rustup toolchain. Requirement
+  TC-14. Status: built and notarized (2026-10-25); publishing awaits the maintainer.

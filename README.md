@@ -52,7 +52,13 @@ vocabulary, left as 意大利) and 它 for animals, which Taiwan writes 牠.
 
 ## Install
 
-Apple Silicon, macOS 13 or later, Rust and the Xcode command line tools:
+Download `tradclip-<version>-macos.zip` from
+[Releases](https://github.com/Hsiang-Tang/tradclip/releases) (Apple Silicon and
+Intel, macOS 13 or later, notarized), unzip, move `Tradclip.app` into Applications
+and open it.
+
+To build from source instead (Rust, ideally through rustup, and the Xcode command
+line tools):
 
 ```
 macos/build.sh

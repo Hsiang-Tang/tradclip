@@ -98,3 +98,15 @@ previous app in front, and a run like that tests nothing.
   (default on) it converted again.
 - K3: Traditional and English text left the change count as is (97 to 97).
 - Concealed content stayed Simplified.
+
+### 2026-10-25 Release build (T9)
+
+- rustup installed in the home folder (stable 1.99.1, both macOS targets), PATH left
+  as it was; the build scripts call it directly. Tests pass on both toolchains.
+- `macos/build.sh` makes a universal app: `lipo` lists x86_64 and arm64, `vtool`
+  shows minos 13.0 for both, and the linker no longer warns about objects built for
+  macOS 26.
+- `macos/release.sh`: signed with the Developer ID, notarization Accepted
+  (f7b4f1cf-dafb-4d78-89ad-0650d2bc3b08), stapled, `spctl` reports Notarized Developer
+  ID. Zip sha256 6b7392b2031e2bc075c305844d420bbf0dedfc76dcd90061647a36c8f042cd33.
+- Not run: launching on an Intel Mac or on macOS 13 (no such machine here).

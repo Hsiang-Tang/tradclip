@@ -58,6 +58,8 @@ Clipboard (macOS shell):
   missing), Open at Login, Quit. Choices persist across launches.
 - TC-10 Private: no network access, and clipboard text is never logged or stored.
 - TC-11 Fast: converting 10,000 characters takes under 50 ms in a release build.
+- TC-14 Released as one universal app (Apple Silicon and Intel) for macOS 13 or later,
+  signed with a Developer ID and notarized, so it opens without a warning.
 
 ## Acceptance
 
