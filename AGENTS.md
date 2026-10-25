@@ -1,0 +1,41 @@
+# tradclip project rules
+
+tradclip turns Simplified Chinese on the macOS clipboard into Traditional Chinese
+(Taiwan character forms): automatically for text copied in the ChatGPT and Claude
+apps, and on demand with Control+Option+V. This file is the single source of project
+rules; `CLAUDE.md` only imports it.
+
+The project follows spec-driven development: the specification is the source of
+truth, the plan and tasks derive from it, and code derives from the tasks.
+
+## Where things go
+
+- `specs/NNN-topic/`: one folder per feature with `spec.md`, `plan.md`, `tasks.md`
+  and `acceptance.md`.
+- `docs/`: `STATUS.md` (where we are, next action), `VERIFICATION.md` (commands and
+  results log), `adr/` (decision records).
+- `crates/tradclip-core`: the converter and its C interface (`include/tradclip.h`).
+  No system APIs.
+- `crates/tradclip-cli`: `tradclip`, converts stdin or arguments.
+- `macos/`: Swift menu bar app and `build.sh`.
+- `data/opencc/`: pinned OpenCC dictionaries (`SOURCES.txt` has the commit and
+  sha256 values); `data/overrides.tsv`: the project's own mappings.
+
+## Reading order for a new session
+
+`AGENTS.md`, `README.md`, `docs/STATUS.md`, `docs/adr/`, the active
+`specs/NNN-topic/{spec,plan,tasks,acceptance}.md`, `docs/VERIFICATION.md`, then the
+real Git state.
+
+## Development rules
+
+- Spec first. A behavior change starts as a requirement in `spec.md`, then a case in
+  `acceptance.md` and `crates/tradclip-core/tests/cases.txt`, then code. Never delete
+  or loosen a case to make an implementation pass.
+- Conversion decisions live only in `tradclip-core`; the shell never edits text.
+- Never log, store or send clipboard text. No network access.
+- Run the commands in `docs/VERIFICATION.md` before and after a change and log the
+  results there. Update `tasks.md` and `docs/STATUS.md`.
+- Documentation and code comments are in English.
+- Stage explicit paths when committing; do not use `git add -A`.
+- Never commit personal data, employer data, internal names, paths or URLs.

@@ -1,0 +1,16 @@
+# Acceptance cases (specs/001-clipboard-convert/acceptance.md).
+# Format: id<TAB>input<TAB>expected. \n and \r in fields are line breaks.
+C01	头发	頭髮
+C02	以后再说	以後再說
+C03	干净的衣服	乾淨的衣服
+C04	这里的面条很好吃	這裡的麵條很好吃
+C05	软件和视频	軟件和視頻
+C06	于先生說台灣很好	于先生說台灣很好
+C07	這是繁體。这是简体。	這是繁體。這是簡體。
+C08	我们用GitHub开PR	我們用GitHub開PR
+C09	let x = 1; // 注释	let x = 1; // 註釋
+C10a		
+C10b	plain ASCII, nothing to do: {"a": [1, 2]}	plain ASCII, nothing to do: {"a": [1, 2]}
+C10c	好的👍我们走吧	好的👍我們走吧
+C10d	第一行\r\n第二行说明	第一行\r\n第二行說明
+C11	台湾的台风	台灣的颱風

@@ -1,0 +1,13 @@
+[package]
+name = "tradclip-cli"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "tradclip"
+path = "src/main.rs"
+
+[dependencies]
+tradclip-core = { path = "../tradclip-core" }

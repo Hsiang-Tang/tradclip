@@ -1,0 +1,8 @@
+Source: https://github.com/BYVoid/OpenCC, data/dictionary/, commit
+9b16591a0d065f5e1121620733721436e83c206f. License: Apache-2.0 (LICENSE in this folder).
+Files are unmodified copies.
+
+a0ca1601c70648cf48b33c3c6210ccbecc5c7eead4b4c3daf76587ba2c03582b  STCharacters.txt
+f6eab5e5c6dd7640597878d3dfc6599ee1279d2bc91561eadd8e114194e2925a  STPhrases.txt
+245b94eb5842957e735dd44b7e7d4ff469a3643126cc8fa511adda5281e9cb86  TWVariants.txt
+36df033675a2e9152927fa8419f0732a061cb4909c5060f25a5cfc9b08ffff06  TWVariantsPhrases.txt

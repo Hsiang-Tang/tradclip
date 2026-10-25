@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = ["crates/tradclip-core", "crates/tradclip-cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "MIT"
