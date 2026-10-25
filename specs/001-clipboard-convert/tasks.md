@@ -7,6 +7,7 @@
   gate. Requirements TC-1 to TC-5, TC-11. Status: done (2026-10-25).
 - T3 C interface and `tradclip` CLI. Status: done (2026-10-25).
 - T4 macOS menu bar app: clipboard watch and rewrite. Requirements TC-6, TC-7, TC-9,
-  TC-10. Status: open.
-- T5 Paste as Traditional shortcut. Requirement TC-8. Status: open.
-- T6 Build, install, scripted checks K1 to K3, docs. Status: open.
+  TC-10. Status: done (2026-10-25); K1 to K3 pass.
+- T5 Paste as Traditional shortcut. Requirement TC-8. Status: built; hand test K4
+  open.
+- T6 Build, install, scripted checks K1 to K3, docs. Status: done (2026-10-25).
