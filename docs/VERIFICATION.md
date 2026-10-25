@@ -110,3 +110,17 @@ previous app in front, and a run like that tests nothing.
   (f7b4f1cf-dafb-4d78-89ad-0650d2bc3b08), stapled, `spctl` reports Notarized Developer
   ID. Zip sha256 6b7392b2031e2bc075c305844d420bbf0dedfc76dcd90061647a36c8f042cd33.
 - Not run: launching on an Intel Mac or on macOS 13 (no such machine here).
+
+### 2026-10-25 Demo film (specs/002-demo-film)
+
+- `node demo/render.mjs timeline`: the real `tradclip` converted the dictated
+  sentence; 10 of 27 characters change, length kept.
+- `node demo/render.mjs qa`: OK at every 0.1 s up to the end card (DF-7).
+- Contact sheet of 14 stills checked by eye: dictation, selection, keycaps, the
+  clipboard flip, paste and end card in order; no product branding.
+- Video: 1920x1080, 60 fps, 16.1 s, H.264 with stereo AAC 48 kHz, 1.2 MB. GIF: 960 px,
+  20 fps, 13.4 s, 0.67 MB.
+- Audio by measurement: score bed about -35 dB RMS; clicks and keys peak -3 to
+  -8.5 dB, mic, chime, ticks and paste cues -5 to -15 dB, each at its event time; the
+  last 0.3 s is below -40 dB (fade-out).
+

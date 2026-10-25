@@ -1,0 +1,9 @@
+{
+  "name": "tradclip-demo",
+  "private": true,
+  "type": "module",
+  "description": "Product demo film drawn from the converter's real output (specs/002-demo-film)",
+  "dependencies": {
+    "playwright-core": "^1.48.0"
+  }
+}

@@ -34,6 +34,15 @@ al., MIT License:
 > CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 > OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+## Demo film sounds
+
+`demo/sounds/` holds short cuts of two Creative Commons 0 (public domain) recordings
+from Freesound: "Mouse Click" by HunteR4708
+(https://freesound.org/people/HunteR4708/sounds/256455/) and "Typing on a keyboard" by
+SamsterBirdies (https://freesound.org/people/SamsterBirdies/sounds/489424/).
+`demo/sounds/SOURCES.md` lists every cut. The rest of the film's audio is synthesized
+by `demo/music.py`.
+
 ## Evaluation data (not shipped)
 
 `tools/fetch-eval-data.sh` downloads, for measurement only: Unihan (Unicode 18.0.0,

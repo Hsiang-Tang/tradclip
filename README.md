@@ -7,6 +7,8 @@ Voice transcription in the ChatGPT and Claude apps often comes out in Simplified
 Chinese. tradclip fixes it on the way to wherever you paste, including terminals,
 where a selection cannot be replaced in place.
 
+![tradclip demo: dictated Simplified text is copied, the clipboard turns Traditional, and it is pasted into a terminal](demo/tradclip-demo.gif)
+
 - **Copy and paste as usual**: Command+C anywhere converts the copied text right
   away, so Command+V pastes Traditional. No permission needed. Switch it off in the
   menu for a copy that should stay Simplified.

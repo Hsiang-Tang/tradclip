@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>tradclip</title>
+<style>
+:root { --paper: #fbfaf6; --ink: #1d1d1b; --soft: #8a8780; --line: #d9d5cb; --accent: #e07a2e; --accent-wash: #f6dcc4; --term: #1f1f1d; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); }
+body { font-family: "PingFang TC", "Helvetica Neue", Helvetica, sans-serif; color: var(--ink); }
+
+#menubar { position: absolute; left: 0; top: 0; width: 1920px; height: 40px; background: #f3f1ea; border-bottom: 1px solid var(--line); }
+#menubar .dot { position: absolute; top: 13px; width: 30px; height: 14px; border-radius: 4px; background: #d6d2c8; }
+#tray { position: absolute; top: 4px; left: 1622px; width: 40px; height: 32px; border-radius: 7px; font: 500 22px/32px "PingFang TC"; text-align: center; }
+#clock { position: absolute; right: 36px; top: 0; font: 500 18px/40px "Helvetica Neue"; color: var(--soft); }
+
+.win { position: absolute; background: #fff; border: 1.5px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 18px 50px rgba(40, 32, 20, 0.08); }
+.win .bar { height: 46px; border-bottom: 1px solid #eeebe3; position: relative; }
+.win .bar i { position: absolute; top: 17px; width: 13px; height: 13px; border-radius: 50%; background: #dcd8ce; }
+.win .bar b { position: absolute; left: 0; right: 0; top: 0; font: 500 17px/46px "Helvetica Neue"; color: var(--soft); text-align: center; }
+
+#chat { left: 100px; top: 96px; width: 840px; height: 740px; }
+#chat .msg { position: absolute; left: 36px; top: 84px; width: 560px; padding: 22px 26px; border-radius: 16px; background: #f4f2ec; }
+#chat .msg span { display: block; height: 14px; border-radius: 7px; background: #dedad0; margin: 10px 0; }
+#composer { position: absolute; left: 32px; right: 32px; bottom: 32px; height: 216px; border: 1.5px solid var(--line); border-radius: 18px; padding: 24px 92px 24px 28px; }
+#dictated { font-size: 40px; line-height: 60px; letter-spacing: 0.5px; }
+#dictated span { position: relative; }
+#dictated span.sel { background: #cfe0f7; }
+#placeholder { position: absolute; left: 28px; top: 24px; font-size: 32px; line-height: 60px; color: #bdb9b0; }
+#mic { position: absolute; right: 24px; bottom: 24px; width: 64px; height: 64px; border-radius: 50%; background: #efece5; }
+#mic svg { position: absolute; left: 18px; top: 14px; }
+#wave { position: absolute; right: 100px; bottom: 40px; height: 32px; display: flex; gap: 5px; align-items: center; }
+#wave span { width: 5px; border-radius: 3px; background: var(--accent); }
+
+#clip { left: 1010px; top: 64px; width: 810px; height: 236px; border-radius: 16px; padding: 22px 28px; }
+#clip .label { font: 600 15px/1 "Helvetica Neue"; letter-spacing: 2.5px; text-transform: uppercase; color: var(--soft); margin-bottom: 16px; }
+#cliptext { font-size: 40px; line-height: 62px; letter-spacing: 0.5px; }
+#cliptext span { position: relative; display: inline-block; }
+#cliptext span .old, #cliptext span .new { display: inline-block; }
+#cliptext span .new { position: absolute; left: 0; top: 0; }
+
+#term { left: 1010px; top: 336px; width: 810px; height: 500px; background: var(--term); border-color: #2b2b28; }
+#term .bar { border-bottom-color: #2e2e2b; }
+#term .bar i { background: #3a3a36; }
+#term .bar b { color: #8d8a82; }
+#termbody { padding: 30px 32px; font: 36px/58px "Menlo", "PingFang TC", monospace; color: #e9e6dd; }
+#termbody .prompt { color: var(--accent); }
+#pasted span { position: relative; }
+#pasted span.changed { text-decoration: underline solid rgba(224, 122, 46, 0.85) 4px; text-underline-offset: 9px; }
+#pasted span .flash { position: absolute; inset: 4px -1px 2px; border-radius: 5px; background: var(--accent); z-index: -1; }
+.caret { display: inline-block; width: 3px; height: 40px; vertical-align: -7px; margin-left: 2px; }
+
+#keys { position: absolute; left: 0; width: 1920px; top: 868px; display: flex; justify-content: center; gap: 18px; }
+#keys .k { width: 104px; height: 104px; border: 2px solid var(--ink); border-radius: 18px; background: var(--paper); font: 500 46px/100px "Helvetica Neue", "PingFang TC"; text-align: center; }
+#keys .k.down { background: var(--accent-wash); border-color: var(--accent); transform: translateY(4px); }
+
+#caption { position: absolute; left: 100px; top: 1012px; font: 600 26px/1 "Helvetica Neue", Helvetica, sans-serif; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+#pointer { position: absolute; left: 0; top: 0; width: 34px; height: 44px; }
+#ring { position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--accent); }
+
+#end { position: absolute; inset: 0; background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }
+#end .mark { font: 700 132px/1 "Helvetica Neue", Helvetica, sans-serif; letter-spacing: -3px; }
+#end .mark i { font-style: normal; color: var(--accent); }
+#end .url { margin-top: 40px; font: 400 28px/1 "Helvetica Neue", Helvetica, sans-serif; color: var(--soft); letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div id="menubar">
+  <div class="dot" style="left: 24px; width: 22px"></div>
+  <div class="dot" style="left: 70px; width: 60px"></div>
+  <div class="dot" style="left: 150px; width: 44px"></div>
+  <div class="dot" style="left: 1500px"></div>
+  <div class="dot" style="left: 1556px"></div>
+  <div id="tray">繁</div>
+  <div class="dot" style="left: 1690px; width: 26px"></div>
+  <div id="clock">10:24</div>
+</div>
+
+<div id="chat" class="win">
+  <div class="bar"><i style="left: 18px"></i><i style="left: 40px"></i><i style="left: 62px"></i><b>Chat</b></div>
+  <div class="msg"><span style="width: 90%"></span><span style="width: 76%"></span><span style="width: 52%"></span></div>
+  <div id="composer">
+    <div id="placeholder">Message</div>
+    <div id="dictated"></div>
+    <div id="wave"></div>
+    <div id="mic"><svg width="28" height="36" viewBox="0 0 28 36"><rect x="8" y="2" width="12" height="20" rx="6" fill="none" stroke="#1d1d1b" stroke-width="2.4"/><path d="M3 16a11 11 0 0 0 22 0M14 27v6M8 33h12" fill="none" stroke="#1d1d1b" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+  </div>
+</div>
+
+<div id="clip" class="win">
+  <div class="label">Clipboard</div>
+  <div id="cliptext"></div>
+</div>
+
+<div id="term" class="win">
+  <div class="bar"><i style="left: 18px"></i><i style="left: 40px"></i><i style="left: 62px"></i><b>zsh</b></div>
+  <div id="termbody"><span class="prompt">~ ❯ </span><span id="pasted"></span><span id="tcaret" class="caret"></span></div>
+</div>
+
+<div id="keys"></div>
+<div id="caption"></div>
+<div id="ring"></div>
+<svg id="pointer" viewBox="0 0 34 44"><path d="M3 2 L3 34 L11 27 L17 41 L23 38 L17 25 L28 25 Z" fill="#1d1d1b" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+
+<div id="end">
+  <div class="mark">trad<i>clip</i></div>
+  <div class="url">github.com/Hsiang-Tang/tradclip</div>
+</div>
+<script src="scene.js"></script>
+</body>
+</html>
