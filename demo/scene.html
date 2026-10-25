@@ -9,6 +9,7 @@
 html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); }
 body { font-family: "PingFang TC", "Helvetica Neue", Helvetica, sans-serif; color: var(--ink); }
 
+#world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
 #menubar { position: absolute; left: 0; top: 0; width: 1920px; height: 40px; background: #f3f1ea; border-bottom: 1px solid var(--line); }
 #menubar .dot { position: absolute; top: 13px; width: 30px; height: 14px; border-radius: 4px; background: #d6d2c8; }
 #tray { position: absolute; top: 4px; left: 1622px; width: 40px; height: 32px; border-radius: 7px; font: 500 22px/32px "PingFang TC"; text-align: center; }
@@ -55,7 +56,9 @@ body { font-family: "PingFang TC", "Helvetica Neue", Helvetica, sans-serif; colo
 #keys .k.down { background: var(--accent-wash); border-color: var(--accent); transform: translateY(4px); }
 
 #caption { position: absolute; left: 100px; top: 1012px; font: 600 26px/1 "Helvetica Neue", Helvetica, sans-serif; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
-#pointer { position: absolute; left: 0; top: 0; width: 34px; height: 44px; }
+#pointer, #ibeam { position: absolute; left: 0; top: 0; }
+#ibeam { transform-origin: 11px 24px; }
+#strip { position: absolute; left: 0; top: 950px; width: 1920px; height: 130px; background: linear-gradient(to bottom, rgba(251, 250, 246, 0), var(--paper) 50%); }
 #ring { position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--accent); }
 
 #end { position: absolute; inset: 0; background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }
@@ -65,6 +68,7 @@ body { font-family: "PingFang TC", "Helvetica Neue", Helvetica, sans-serif; colo
 </style>
 </head>
 <body>
+<div id="world">
 <div id="menubar">
   <div class="dot" style="left: 24px; width: 22px"></div>
   <div class="dot" style="left: 70px; width: 60px"></div>
@@ -96,11 +100,14 @@ body { font-family: "PingFang TC", "Helvetica Neue", Helvetica, sans-serif; colo
   <div class="bar"><i style="left: 18px"></i><i style="left: 40px"></i><i style="left: 62px"></i><b>zsh</b></div>
   <div id="termbody"><span class="prompt">~ ❯ </span><span id="pasted"></span><span id="tcaret" class="caret"></span></div>
 </div>
+</div>
 
+<div id="strip"></div>
 <div id="keys"></div>
 <div id="caption"></div>
 <div id="ring"></div>
-<svg id="pointer" viewBox="0 0 34 44"><path d="M3 2 L3 34 L11 27 L17 41 L23 38 L17 25 L28 25 Z" fill="#1d1d1b" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+<svg id="ibeam" width="22" height="48" viewBox="0 0 22 48"><path d="M4 3h5l2 2 2-2h5M11 5v38M4 45h5l2-2 2 2h5M7 24h8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 3h5l2 2 2-2h5M11 5v38M4 45h5l2-2 2 2h5M7 24h8" fill="none" stroke="#1d1d1b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg id="pointer" width="34" height="44" viewBox="0 0 34 44"><path d="M3 2 L3 34 L11 27 L17 41 L23 38 L17 25 L28 25 Z" fill="#1d1d1b" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
 
 <div id="end">
   <div class="mark">trad<i>clip</i></div>

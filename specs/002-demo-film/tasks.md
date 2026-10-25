@@ -4,3 +4,5 @@
 - T2 Scene and renderer with QA. Requirements DF-1 to DF-3, DF-5, DF-7. Status: done.
 - T3 Score and cues, MP4 and GIF, README embed, release asset. Requirements DF-4,
   DF-6. Status: done except the release asset (waits for the v0.1.0 release).
+- T4 Revision after review: selection follows the pointer, camera shots, bright
+  beat-synced score. Requirements DF-2, DF-4, DF-8. Status: done.

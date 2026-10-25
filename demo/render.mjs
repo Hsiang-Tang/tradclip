@@ -34,8 +34,9 @@ function buildTimeline() {
   const changed = s.map((ch, i) => (ch !== tr[i] ? i : -1)).filter((i) => i >= 0);
   if (PHRASES.join("") !== SENTENCE) throw new Error("PHRASES must spell SENTENCE");
 
-  // Beats, in seconds.
-  const micOn = 1.2, micOff = 4.75;
+  // Beats on a 100 bpm grid (0.6 s), so actions land on the music.
+  const BPM = 100, beat = (n) => +(n * 60 / BPM).toFixed(3);
+  const micOn = beat(2), micOff = beat(8);
   const dictation = [];
   let t = 1.55, upto = 0;
   PHRASES.forEach((p, i) => {
@@ -43,48 +44,53 @@ function buildTimeline() {
     dictation.push({ t: +t.toFixed(3), upto });
     t += 0.2 + (p.endsWith("，") ? 0.22 : 0) + (i % 3) * 0.03;
   });
-  const select = { from: 5.8, to: 6.75, clear: 7.75 };
-  const card = [7.55, 12.1];
-  const morph = 8.15, morphStep = 0.075;
-  const paste = 11.12;
-  const endCard = 13.7;
+  const select = { from: beat(9), to: beat(11), clear: beat(12.75) };
+  const card = [7.45, 99];
+  const chime = beat(14), morph = beat(14.5), morphStep = beat(0.25);
+  const termClick = beat(19), paste = beat(21) + 0.06;
+  const endCard = beat(24);
 
   const clicks = [
     { t: micOn, up: micOn + 0.09 },
     { t: micOff, up: micOff + 0.09 },
     { t: select.from - 0.06, up: select.to + 0.12 },
-    { t: 10.42, up: 10.51 },
+    { t: termClick, up: termClick + 0.09 },
   ];
   const presses = [
-    { key: "cmd", t: 7.15, up: 7.62 }, { key: "c", t: 7.3, up: 7.44 },
-    { key: "cmd", t: 10.9, up: 11.34 }, { key: "v", t: 11.04, up: 11.18 },
+    { key: "cmd", t: beat(11.75), up: beat(12.65) }, { key: "c", t: beat(12), up: beat(12.24) },
+    { key: "cmd", t: beat(20.75), up: beat(21.6) }, { key: "v", t: beat(21), up: beat(21.24) },
   ];
   const timeline = {
-    fps: FPS, duration: +(endCard + 2.4).toFixed(2), endCard, gifEnd: endCard - 0.3,
+    fps: FPS, bpm: BPM, duration: +(endCard + 3).toFixed(2), endCard, gifEnd: endCard - 0.3,
     simplified: SENTENCE, traditional, changed,
     dictation, recording: [micOn + 0.1, micOff], select, card, morph, morphStep,
-    trayPulse: morph - 0.15, termFocus: 10.42, paste,
+    ibeam: [5.22, 10.4], trayPulse: chime, termFocus: termClick, paste,
     clicks, presses,
-    keyGroups: [{ keys: ["cmd", "c"], show: [6.95, 7.95] }, { keys: ["cmd", "v"], show: [10.7, 11.7] }],
+    keyGroups: [{ keys: ["cmd", "c"], show: [6.75, 7.5] }, { keys: ["cmd", "v"], show: [12.2, 13.2] }],
+    camera: [
+      { t: 0.25, d: 0.85, shot: "chat" }, { t: 7.45, d: 0.75, shot: "clip" },
+      { t: 10.45, d: 0.8, shot: "term" }, { t: 13.1, d: 0.75, shot: "wide" },
+    ],
     mouse: [
-      { t: 0, at: "rest" }, { t: 0.45, at: "rest" }, { t: 1.08, at: "mic" }, { t: 4.75, at: "mic" },
-      { t: 5.15, at: "mic" }, { t: 5.72, at: "textStart" }, { t: select.from, at: "textStart" },
-      { t: select.to, at: "textEnd" }, { t: 9.55, at: "textEnd" }, { t: 10.32, at: "term" },
+      { t: 0, at: "rest" }, { t: 0.3, at: "rest" }, { t: 1.05, at: "mic" }, { t: micOff, at: "mic" },
+      { t: 4.95, at: "mic" }, { t: 5.3, at: "textStart" }, { t: select.from, at: "textStart" },
+      { t: select.to, at: "textEnd" }, { t: 10.3, at: "textEnd" }, { t: 11.25, at: "term" },
     ],
     captions: [
       { t: 1.3, end: 4.9, text: "Voice typing comes out Simplified" },
-      { t: 5.25, end: 7.7, text: "Copy as usual" },
-      { t: 7.95, end: 10.05, text: "tradclip turns the clipboard Traditional" },
-      { t: 10.35, end: 13.1, text: "Paste anywhere" },
+      { t: 5.15, end: 7.7, text: "Copy as usual" },
+      { t: 7.95, end: 10.7, text: "tradclip turns the clipboard Traditional" },
+      { t: 10.95, end: 14.0, text: "Paste anywhere" },
     ],
-    // Sound events for music.py.
+    // Sound events for music.py; the score itself follows `bpm`.
     sounds: [
       ...clicks.flatMap((c) => [{ t: c.t, kind: "mouse-press" }, { t: c.up, kind: "mouse-release" }]),
       ...presses.flatMap((p) => [{ t: p.t, kind: "key-press" }, { t: p.up, kind: "key-release" }]),
-      { t: micOn + 0.1, kind: "mic-on" }, { t: micOff + 0.05, kind: "mic-off" },
-      { t: morph - 0.15, kind: "chime" },
-      ...changed.map((_, k) => ({ t: morph + k * morphStep, kind: "tick" })),
+      { t: micOn + 0.05, kind: "mic-on" }, { t: micOff + 0.05, kind: "mic-off" },
+      { t: chime, kind: "chime" },
+      ...changed.map((_, k) => ({ t: +(morph + k * morphStep).toFixed(3), kind: "flip", step: k })),
       { t: paste - 0.02, kind: "paste" },
+      { t: endCard, kind: "sting" },
     ],
   };
   fs.writeFileSync(path.join(out, "timeline.json"), JSON.stringify(timeline));
@@ -112,7 +118,7 @@ async function qa(timeline) {
     const found = [];
     for (let t = 0; t < timeline.endCard; t += 0.1) {
       await seek(page, t);
-      for (const p of await page.evaluate(() => window.film.qa())) found.push(`${t.toFixed(1)} s: ${p}`);
+      for (const p of await page.evaluate((x) => window.film.qa(x), t)) found.push(`${t.toFixed(1)} s: ${p}`);
     }
     return found;
   });
@@ -124,7 +130,7 @@ async function stills(timeline) {
   const dir = path.join(out, "stills");
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });
-  const times = [0.6, 1.25, 3.0, 4.8, 6.3, 7.35, 7.8, 8.6, 9.4, 10.45, 11.1, 11.4, 12.5, timeline.endCard + 1.5];
+  const times = [0.15, 1.2, 3.0, 5.6, 5.95, 6.3, 7.2, 9.3, 10.6, 11.4, 12.9, 13.5, 14.1, timeline.endCard + 1.5];
   await withPage(timeline, async (page) => {
     for (const [i, t] of times.entries()) {
       await seek(page, t);
@@ -159,7 +165,7 @@ async function video(timeline) {
 
 function gif(timeline) {
   const silent = path.join(out, "silent.mp4"), palette = path.join(out, "palette.png"), gifOut = path.join(here, "tradclip-demo.gif");
-  const vf = "fps=20,scale=960:-1:flags=lanczos";
+  const vf = "fps=15,scale=960:-1:flags=lanczos";
   execFileSync(FFMPEG, ["-y", "-loglevel", "error", "-t", String(timeline.gifEnd), "-i", silent, "-vf", `${vf},palettegen=max_colors=64:stats_mode=diff`, palette]);
   execFileSync(FFMPEG, ["-y", "-loglevel", "error", "-t", String(timeline.gifEnd), "-i", silent, "-i", palette,
     "-lavfi", `${vf}[x];[x][1:v]paletteuse=dither=none:diff_mode=rectangle`, gifOut]);

@@ -124,3 +124,20 @@ previous app in front, and a run like that tests nothing.
   -8.5 dB, mic, chime, ticks and paste cues -5 to -15 dB, each at its event time; the
   last 0.3 s is below -40 dB (fade-out).
 
+### 2026-10-25 Demo film revision after review (T4)
+
+- Maintainer review: the selection drifted from the pointer, the score was low and
+  the same throughout, and the framing was flat.
+- Cause of the drift: the pointer moved in a straight diagonal with easing while the
+  selection grew linearly by character count. Now the pointer follows the text lines,
+  the selection is hit-tested from the pointer every frame, and an I-beam replaces
+  the arrow over text. A probe at 5.4, 5.6, 5.95, 6.3 and 6.6 s gave 0, 2, 9, 16 and
+  27 selected characters, each ending at the pointer (DF-8).
+- Camera shots on the composer, the clipboard with the menu bar, and the terminal,
+  then back to the whole desktop; `qa` checks each settled shot: OK.
+- Score: C major at 100 bpm, marimba with ping-pong delay, plucked bass, shaker, kick,
+  melody after the conversion; all clicks, keys and flips on the beat grid. RMS: intro
+  -37.5 dB, groove -31.4, flips -24.4, melody -28.6; clicks and keys peak -4 to -6 dB.
+- Video 17.4 s, 1920x1080, 60 fps, with AAC audio. GIF 15 fps (20 fps was 2.27 MB),
+  14.1 s, 1.62 MB.
+

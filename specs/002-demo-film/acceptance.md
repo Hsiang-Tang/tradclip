@@ -8,3 +8,4 @@
 | F4 | DF-4 | `demo/sounds/SOURCES.md`, levels of `demo/out/audio.wav` around each event in `timeline.json` | every sample has a source and CC0 license; every event is audible above the score; the end fades out |
 | F5 | DF-6 | `ffprobe` on the MP4, size of the GIF | 1920x1080 with an audio stream; GIF under 2 MB; MP4 not tracked by Git |
 | F6 | DF-7 | `node demo/render.mjs all` | rebuilds everything; the QA pass prints `qa: OK` |
+| F7 | DF-8 | stills during the drag, `qa` | the selection ends at the pointer in every still; the pointer stays on the text lines |
