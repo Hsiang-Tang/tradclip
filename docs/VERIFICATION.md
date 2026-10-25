@@ -141,3 +141,10 @@ previous app in front, and a run like that tests nothing.
 - Video 17.4 s, 1920x1080, 60 fps, with AAC audio. GIF 15 fps (20 fps was 2.27 MB),
   14.1 s, 1.62 MB.
 
+### 2026-10-25 Release v0.1.0
+
+- `gh release create v0.1.0` with `tradclip-0.1.0-macos.zip` and `tradclip-demo.mp4`.
+- Downloaded back from the release: zip sha256 matches
+  6b7392b2031e2bc075c305844d420bbf0dedfc76dcd90061647a36c8f042cd33, `spctl` accepts the
+  unzipped app. The README GIF loads from the main branch.
+
