@@ -57,7 +57,7 @@ Apple Silicon, macOS 13 or later, Rust and the Xcode command line tools:
 macos/build.sh
 ```
 
-This builds `Tradclip.app`, installs it into `~/Applications` and starts it; 繁 appears
+This builds `Tradclip.app`, installs it into `/Applications` and starts it; 繁 appears
 in the menu bar. For Control+Option+V, choose "Allow Accessibility" in that menu and
 switch tradclip on in System Settings > Privacy & Security > Accessibility. Choose
 "Open at Login" to keep it running.

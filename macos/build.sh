@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build, sign and install the tradclip menu bar app.
 #
-#   macos/build.sh               build, sign, install into ~/Applications and launch
+#   macos/build.sh               build, sign, install into /Applications and launch
 #   macos/build.sh --no-install  build only (output in macos/build/)
 #
 # Signs with the first Apple Development identity when one exists, so the
@@ -64,7 +64,7 @@ if [ "$INSTALL" = 0 ]; then
   exit 0
 fi
 
-DEST="$HOME/Applications"
+DEST="/Applications"
 mkdir -p "$DEST"
 killall Tradclip 2>/dev/null || true
 rm -rf "$DEST/Tradclip.app"
